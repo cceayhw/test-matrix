@@ -45,10 +45,10 @@ jobs:
             ./blacklight-query xa${NODE_N}
           fi
           rm -f xa*
-      - name: create artifact
-        uses: actions/upload-artifact@4
-        with:
-          name: blacklight-report-${{ matrix.node_n }}
-          path: blacklight-query/outputs/**
-          if-no-files-found: warn
-          retention-days: 1
+      # - name: create artifact
+      #   uses: actions/upload-artifact@4
+      #   with:
+      #     name: blacklight-report-${{ matrix.node_n }}
+      #     path: blacklight-query/outputs/**
+      #     if-no-files-found: warn
+      #     retention-days: 1
