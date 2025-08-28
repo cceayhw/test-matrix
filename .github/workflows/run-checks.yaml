@@ -18,7 +18,7 @@ jobs:
       matrix:
         node_n: [a,b,c,d,e,f,g,h,i,j]
       fail-fast: false
-      max-parallel: ${{ github.event.inputs.parallels || 4 }}
+      max-parallel: ${{ github.event.inputs.parallels || 5 }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/checkout@v5
@@ -69,7 +69,7 @@ jobs:
           ls -lR
           for i in downloaded/*
             echo $i
-            mv $i/blacklight-query/outputs/* reports
+            mv $i/* reports
           done
           ls -l reports
       - name: upload merged
