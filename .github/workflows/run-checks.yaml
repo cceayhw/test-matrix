@@ -44,7 +44,7 @@ jobs:
           else
             cat xa${NODE_N}
             node --version
-            ./blacklight-query xa${NODE_N}
+            ./blacklight-query < xa${NODE_N}
           fi
           rm -f xa*
       - name: create artifact
