@@ -45,7 +45,8 @@ jobs:
             ./blacklight-query xa${NODE_N}
           fi
           rm -f xa*
-      - name: actions/upload-artifact@4
+      - name: create artifact
+        uses: actions/upload-artifact@4
         with:
           name: blacklight-report
           path: blacklight-query/outputs/**
