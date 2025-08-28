@@ -1,0 +1,29 @@
+---
+name: check matrix
+
+on:
+  workflow_dispatch:
+    inputs:
+      parallels:
+        description: 'Number of parallels'
+        required: false
+        default: '2'
+        type: number
+
+jobs:
+  matrix-checks:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        threads: [a,b,c,d,e,f,g,h,i,j]
+      fail-fast: false
+      max-parallel: ${{ github.event.inputs.parallels || 2 }}
+    steps:
+      - uses: actions/checkout@v5
+      - name: run thread ${{ matrix.threads }}
+        env:
+          PLL_NODE: ${{ matrix.threads }}
+        run: |
+          echo "Running parallel node ${{ matrix.threads }}"
+          split -l$((`wc -l <a.in`/10)) a.in
+          [ -f "xa${{PLL_NODE}}] && echo "do something" || echo "ignored"
