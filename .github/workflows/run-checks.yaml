@@ -54,3 +54,27 @@ jobs:
           path: blacklight-query/outputs/**
           if-no-files-found: warn
           retention-days: 1
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    needs: matrix-checks
+    if: success() || failure()
+    steps:
+      - name: get artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: downloaded
+      - name: shell
+        run: |
+          mkdir reports
+          for i in downloaded/*
+            echo $i
+            mv $i/blacklight-query/outputs/* reports
+          done
+          ls -l reports
+      - name: upload merged
+              uses: actions/upload-artifact@v4
+        with:
+          name: merged-reports
+          path: reports/**
+          if-no-files-found: warn
+          retention-days: 1
