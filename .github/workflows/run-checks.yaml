@@ -25,7 +25,7 @@ jobs:
         with:
           repository: 'the-markup/blacklight-query'
           path: blacklight-query
-      - uses: actions/setup_node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: '20.15.1'
       - run: npm install
@@ -48,7 +48,7 @@ jobs:
       - name: create artifact
         uses: actions/upload-artifact@4
         with:
-          name: blacklight-report
+          name: blacklight-report-${{ matrix.node_n }}
           path: blacklight-query/outputs/**
           if-no-files-found: warn
           retention-days: 1
