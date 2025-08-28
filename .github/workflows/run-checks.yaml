@@ -27,4 +27,4 @@ jobs:
         run: |
           echo "Running parallel node ${{ matrix.threads }}"
           split -l$((`wc -l <a.in`/10)) a.in
-          [ -f "xa${NODE_N}" ] && echo "do something" || echo "ignored"
+          #[ -f "xa${NODE_N}" ] && echo "do something" || echo "ignored"
