@@ -22,8 +22,8 @@ jobs:
       - uses: actions/checkout@v5
       - name: run thread ${{ matrix.threads }}
         env:
-          PLL_NODE: ${{ matrix.threads }}
+          NODE_N: ${{ matrix.threads }}
         run: |
           echo "Running parallel node ${{ matrix.threads }}"
           split -l$((`wc -l <a.in`/10)) a.in
-          [ -f "xa${{PLL_NODE}}] && echo "do something" || echo "ignored"
+          [ -f "xa${{NODE_N}}] && echo "do something" || echo "ignored"
