@@ -20,7 +20,8 @@ jobs:
       max-parallel: ${{ github.event.inputs.parallels || 2 }}
     steps:
       - uses: actions/checkout@v5
-      - name: run thread ${{ matrix.threads }}
+      - name: run thread abc
+      # ${{ matrix.threads }}
         env:
           NODE_N: "abc"
         run: |
