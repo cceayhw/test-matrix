@@ -21,11 +21,33 @@ jobs:
       max-parallel: ${{ github.event.inputs.parallels || 2 }}
     steps:
       - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: 'the-markup/blacklight-query'
+          path: blacklight-query
+      - uses: actions/setup_node@v4
+        with:
+          node-version: '20.15.1'
+      - run: npm install
       - name: run thread abc ${{ matrix.node_n }}
         env:
           NODE_N: ${{ matrix.node_n }}
+        working-directory: ./blacklight-query
         run: |
           echo "Running parallel node ${{ matrix.node_n }}"
-          split -l$((`wc -l <a.in`/10)) a.in
-          [ -f "xa${NODE_N}" ] && echo "do something" && cat xa${NODE_N} || echo "ignored"
+          split -l$((`wc -l <../a.in`/10)) ../a.in
+          if [ ! -f "xa${NODE_N}" ]
+          then
+             echo "ignored"
+          else
+            cat xa${NODE_N}
+            node --version
+            ./blacklight-query xa${NODE_N}
+          fi
           rm -f xa*
+      - name: actions/upload-artifact@4
+        with:
+          name: blacklight-report
+          path: blacklight-query/outputs/**
+          if-no-files-found: warn
+          retention-days: 1
