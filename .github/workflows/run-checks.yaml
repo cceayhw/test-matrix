@@ -8,7 +8,7 @@ on:
       parallels:
         description: 'Number of parallels'
         required: false
-        default: 2
+        default: 4
         type: number
 
 jobs:
@@ -18,7 +18,7 @@ jobs:
       matrix:
         node_n: [a,b,c,d,e,f,g,h,i,j]
       fail-fast: false
-      max-parallel: ${{ github.event.inputs.parallels || 2 }}
+      max-parallel: ${{ github.event.inputs.parallels || 4 }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/checkout@v5
@@ -66,6 +66,7 @@ jobs:
       - name: shell
         run: |
           mkdir reports
+          ls -lR
           for i in downloaded/*
             echo $i
             mv $i/blacklight-query/outputs/* reports
@@ -75,6 +76,13 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: merged-reports
-          path: reports/**
+          path: |
+            reports/**
+            a.in
           if-no-files-found: warn
           retention-days: 1
+      - name: delete matrix artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            blacklight-report-*
