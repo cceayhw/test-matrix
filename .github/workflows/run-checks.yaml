@@ -7,7 +7,7 @@ on:
       parallels:
         description: 'Number of parallels'
         required: false
-        default: '2'
+        default: 2
         type: number
 
 jobs:
@@ -15,16 +15,15 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        threads: [a,b,c,d,e,f,g,h,i,j]
+        node_n: [a,b,c,d,e,f,g,h,i,j]
       fail-fast: false
       max-parallel: ${{ github.event.inputs.parallels || 2 }}
     steps:
       - uses: actions/checkout@v5
-      - name: run thread abc
-      # ${{ matrix.threads }}
+      - name: run thread abc ${{ matrix.node_n }}
         env:
-          NODE_N: "abc"
+          NODE_N: ${{ matrix.node_n }}
         run: |
-          echo "Running parallel node ${{ matrix.threads }}"
+          echo "Running parallel node ${{ matrix.node_n }}"
           split -l$((`wc -l <a.in`/10)) a.in
           #[ -f "xa${NODE_N}" ] && echo "do something" || echo "ignored"
