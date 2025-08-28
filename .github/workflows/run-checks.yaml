@@ -68,6 +68,7 @@ jobs:
           mkdir reports
           ls -lR
           for i in downloaded/*
+          do
             echo $i
             mv $i/* reports
           done
