@@ -77,7 +77,7 @@ jobs:
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0
         id: table4
         with:
-          json_file_path: "scanner/blacklight-query/table4.json"
+          json_file_path: "scanner/blacklight-query/table5.json"
 
       - name: job summary
         env:
