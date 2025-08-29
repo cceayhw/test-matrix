@@ -74,10 +74,10 @@ jobs:
         id: table3
         with:
           json_file_path: "scanner/blacklight-query/table3.json"
-      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
-        id: table4
-        with:
-          json_file_path: "scanner/blacklight-query/table5.json"
+      # - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+      #   id: table4
+      #   with:
+      #     json_file_path: "scanner/blacklight-query/table5.json"
 
       - name: job summary
         env:
@@ -120,7 +120,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          #echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
 
