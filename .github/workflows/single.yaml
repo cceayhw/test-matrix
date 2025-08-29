@@ -51,7 +51,9 @@
               ls -l output*
               DOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts)
               cat outputs/*/inspection.json | jq -r .hosts
-              #COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
+              COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
               echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
-              echo "Domains:\n\`\`\`${DOMAINS}\`\`\`" >> $GITHUB_STEP_SUMMARY
-              #echo "Cookies:\n\`\`\`${COOKIES}\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "Domains:" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`${DOMAINS}\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "Cookies" >> $GITHUB_STEP_SUMMARY
+              echo "\n\`\`\`${COOKIES}\`\`\`" >> $GITHUB_STEP_SUMMARY
