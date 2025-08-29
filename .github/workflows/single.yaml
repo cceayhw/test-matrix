@@ -1,97 +1,126 @@
 ---
-    name: check single url
-    
-    on:
-      workflow_dispatch:
-        inputs:
-          url:
-            description: 'url to test'
-            required: true
-            default: 'https://www.sonarqube-dev.ucl.ac.uk'
-            type: string
-    
-    jobs:
-      check_url:
-        runs-on: ubuntu-latest
-        steps:
-          - uses: actions/checkout@v5
-          - uses: actions/checkout@v5
-            with:
-              repository: 'the-markup/blacklight-query'
-              path: scanner/blacklight-query
-          - uses: actions/setup-node@v4
-            with:
-              node-version: '20.15.1'
-          - name: node
-            working-directory: scanner/blacklight-query
-            run: npm install
-        #   - name: setup lib
-        #     run: |
-        #       #ldd chrome | grep not
-        #       sudo apt-get install -y libatk-bridge2.0-0
-        #       sudo apt-get install -y ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 \
-        #         libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 \
-        #         libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 \
-        #         libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 \
-        #         libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
-    
-          - name: run backlight
-            env:
-              URL: ${{ github.event.inputs.url }}
-            working-directory: "scanner/blacklight-query"
-            run: |
-              echo "Checking url $URL"
-              node --version
-              echo "${URL}" | ./blacklight-query
-          - name: set file name
-            working-directory: "scanner/blacklight-query"
-            run: |
-              cp outputs/*/inspection.json single_inspection.json
-              pwd
-              ls -l
-          - uses: buildingcash/json-to-markdown-table-action@v1.1.0
-            id: table
-            with:
-              json_file_path: "scanner/blacklight-query/single_inspection.json"
-          - run: echo ${{ steps.table.outputs.table }}
+name: check single url
 
-          - name: job summary
-            env:
-              URL: ${{ github.event.inputs.url }}
-            working-directory: "scanner/blacklight-query"
-            run: |
-              ls -l output*
-              DOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts)
-              COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
-              LISTENERS=$(cat outputs/*/inspection.json | jq -r .reports.behaviour_event_listeners)
-              TRACKERS=$(cat outputs/*/inspection.json | jq -r .reports.third_party_trackers)
-              echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'url to test'
+        required: true
+        default: 'https://www.sonarqube-dev.ucl.ac.uk'
+        type: string
 
-              echo "<details open><summary>Domains:</summary>" >> $GITHUB_STEP_SUMMARY
-              echo " " >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "${DOMAINS}" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "</details>" >> $GITHUB_STEP_SUMMARY
+env:
+  E_FDOMAINS:
+  E_TDOMAINS:
+  E_COOKIES:
+  E_LISTNERS:
+  E_TRACKERS:
 
-              echo "<details><summary>Cookies:</summary>" >> $GITHUB_STEP_SUMMARY
-              echo " " >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "${COOKIES}" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "</details>" >> $GITHUB_STEP_SUMMARY
+jobs:
+  check_url:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: 'the-markup/blacklight-query'
+          path: scanner/blacklight-query
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+      - name: node
+        working-directory: scanner/blacklight-query
+        run: npm install
+    #   - name: setup lib
+    #     run: |
+    #       #ldd chrome | grep not
+    #       sudo apt-get install -y libatk-bridge2.0-0
+    #       sudo apt-get install -y ca-certificates fonts-liberation libasound2 libatk-bridge2.0-0 \
+    #         libatk1.0-0 libc6 libcairo2 libcups2 libdbus-1-3 libexpat1 libfontconfig1 libgbm1 libgcc1 \
+    #         libglib2.0-0 libgtk-3-0 libnspr4 libnss3 libpango-1.0-0 libpangocairo-1.0-0 libstdc++6 \
+    #         libx11-6 libx11-xcb1 libxcb1 libxcomposite1 libxcursor1 libxdamage1 libxext6 libxfixes3 \
+    #         libxi6 libxrandr2 libxrender1 libxss1 libxtst6 lsb-release wget xdg-utils
 
-              echo "<details><summary>Event listeners:</summary>" >> $GITHUB_STEP_SUMMARY
-              echo " " >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "${LISTENERS}" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "</details>" >> $GITHUB_STEP_SUMMARY
+      - name: run backlight
+        env:
+          URL: ${{ github.event.inputs.url }}
+        working-directory: "scanner/blacklight-query"
+        run: |
+          echo "Checking url $URL"
+          node --version
+          echo "${URL}" | ./blacklight-query
+      - name: set file name
+        working-directory: "scanner/blacklight-query"
+        run: |
+          echo "E_FDOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.first_party)" >> $GITHUB_ENV
+          echo "E_TDOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.third_party)" >> $GITHUB_ENV
+          echo "E_COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)" >> $GITHUB_ENV
+          #echo "E_LISTNERS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.third_party)" >> $GITHUB_ENV
+          echo "E_TRACKERS=$(cat outputs/*/inspection.json | jq -r .reports.third_party_trackers)" >> $GITHUB_ENV
 
-              echo "<details><summary>3rd Party Trackers:</summary>" >> $GITHUB_STEP_SUMMARY
-              echo " " >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-              echo "</details>" >> $GITHUB_STEP_SUMMARY
-              echo ${{ steps.table.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          # cp outputs/*/inspection.json single_inspection.json
+          # pwd
+          # ls -l
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        id: table1
+        with:
+          json: "${{env.E_FDOMAINS}}"
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        id: table2
+        with:
+          json: "${{env.E_TDOMAINS}}"
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        id: table3
+        with:
+          json: "${{env.E_COOKIES}}"
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        id: table4
+        with:
+          json: "${{env.E_TRACKERS}}"
+
+      - name: job summary
+        env:
+          URL: ${{ github.event.inputs.url }}
+        working-directory: "scanner/blacklight-query"
+        run: |
+          ls -l output*
+          DOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts)
+          COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
+          LISTENERS=$(cat outputs/*/inspection.json | jq -r .reports.behaviour_event_listeners)
+          TRACKERS=$(cat outputs/*/inspection.json | jq -r .reports.third_party_trackers)
+          echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
+
+          echo "<details open><summary>Domains:</summary>" >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${DOMAINS}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.table1.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.table2.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+          echo "<details><summary>Cookies:</summary>" >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${COOKIES}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.table3.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+          echo "<details><summary>Event listeners:</summary>" >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${LISTENERS}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+          echo "<details><summary>3rd Party Trackers:</summary>" >> $GITHUB_STEP_SUMMARY
+          echo " " >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+
