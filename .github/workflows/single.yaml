@@ -53,11 +53,11 @@ jobs:
       - name: set file name
         working-directory: "scanner/blacklight-query"
         run: |
-          echo "E_FDOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.first_party)" >> $GITHUB_ENV
-          echo "E_TDOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.third_party)" >> $GITHUB_ENV
-          echo "E_COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)" >> $GITHUB_ENV
-          #echo "E_LISTNERS=$(cat outputs/*/inspection.json | jq -r .hosts.requests.third_party)" >> $GITHUB_ENV
-          echo "E_TRACKERS=$(cat outputs/*/inspection.json | jq -r .reports.third_party_trackers)" >> $GITHUB_ENV
+          cat outputs/*/inspection.json | jq -r .hosts.requests.first_party > table1.json
+          cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table2.json
+          cat outputs/*/inspection.json | jq -r .reports.cookies > table3.json
+          # cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table4.json
+          cat outputs/*/inspection.json | jq -r .reports.third_party_trackers > table5.json
 
           # cp outputs/*/inspection.json single_inspection.json
           # pwd
@@ -65,19 +65,19 @@ jobs:
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0
         id: table1
         with:
-          json: "${{env.E_FDOMAINS}}"
+          json_file_path: "scanner/blacklight-query/table1.json"
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0
         id: table2
         with:
-          json: "${{env.E_TDOMAINS}}"
+          json_file_path: "scanner/blacklight-query/table2.json"
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0
         id: table3
         with:
-          json: "${{env.E_COOKIES}}"
+          json_file_path: "scanner/blacklight-query/table3.json"
       - uses: buildingcash/json-to-markdown-table-action@v1.1.0
         id: table4
         with:
-          json: "${{env.E_TRACKERS}}"
+          json_file_path: "scanner/blacklight-query/table4.json"
 
       - name: job summary
         env:
