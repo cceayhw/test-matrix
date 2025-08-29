@@ -60,8 +60,9 @@ jobs:
           # cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table4.json
           cat outputs/*/inspection.json | jq -r .reports.third_party_trackers > table5.json
           echo "table5"
-          cat table5.json
           [ "$(cat table5.json)" == "[]" ] && echo "[{"data":"empty"}]" > table5.json
+          cat table5.json
+          
 
           # cp outputs/*/inspection.json single_inspection.json
           # pwd
