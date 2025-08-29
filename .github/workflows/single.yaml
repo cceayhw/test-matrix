@@ -50,18 +50,35 @@
             run: |
               ls -l output*
               DOMAINS=$(cat outputs/*/inspection.json | jq -r .hosts)
-              cat outputs/*/inspection.json | jq -r .hosts
               COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
+              LISTENERS=$(cat outputs/*/inspection.json | jq -r .reports.behaviour_event_listeners)
+              TRACKERS=$(cat outputs/*/inspection.json | jq -r .reports.third_party_trackers)
               echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
 
-              echo "<details><summary>Domains:</summary>" >> $GITHUB_STEP_SUMMARY
+              echo "<details open><summary>Domains:</summary>" >> $GITHUB_STEP_SUMMARY
               echo " " >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "${DOMAINS}" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "</details>" >> $GITHUB_STEP_SUMMARY
+
               echo "<details><summary>Cookies:</summary>" >> $GITHUB_STEP_SUMMARY
+              echo " " >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "${COOKIES}" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+              echo "<details><summary>Event listeners:</summary>" >> $GITHUB_STEP_SUMMARY
+              echo " " >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${LISTENERS}" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "</details>" >> $GITHUB_STEP_SUMMARY
+
+              echo "<details><summary>3rd Party Trackers:</summary>" >> $GITHUB_STEP_SUMMARY
+              echo " " >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "</details>" >> $GITHUB_STEP_SUMMARY
