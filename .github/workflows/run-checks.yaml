@@ -2,7 +2,6 @@
 name: check matrix
 
 on:
-  push:
   workflow_dispatch:
     inputs:
       parallels:
