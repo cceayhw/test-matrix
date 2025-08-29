@@ -54,6 +54,10 @@
               COOKIES=$(cat outputs/*/inspection.json | jq -r .reports.cookies)
               echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
               echo "Domains:" >> $GITHUB_STEP_SUMMARY
-              echo "\`\`\`${DOMAINS}\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${DOMAINS}" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "Cookies" >> $GITHUB_STEP_SUMMARY
-              echo "\n\`\`\`${COOKIES}\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
+              echo "${COOKIES}" >> $GITHUB_STEP_SUMMARY
+              echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
