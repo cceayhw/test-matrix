@@ -61,6 +61,8 @@ jobs:
           cat outputs/*/inspection.json | jq -r .reports.third_party_trackers > table5.json
           echo "table5"
           cat table5.json
+          [ "$(cat table5.json)" == "[]" ] && echo "[{"data":"empty"}]" > table5.json
+
           # cp outputs/*/inspection.json single_inspection.json
           # pwd
           # ls -l
@@ -76,10 +78,10 @@ jobs:
         id: table3
         with:
           json_file_path: "scanner/blacklight-query/table3.json"
-      # - uses: buildingcash/json-to-markdown-table-action@v1.1.0
-      #   id: table4
-      #   with:
-      #     json_file_path: "scanner/blacklight-query/table5.json"
+      - uses: buildingcash/json-to-markdown-table-action@v1.1.0
+        id: table4
+        with:
+          json_file_path: "scanner/blacklight-query/table5.json"
 
       - name: job summary
         env:
@@ -122,7 +124,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          #echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
 
