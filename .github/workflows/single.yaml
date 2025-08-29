@@ -128,7 +128,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.table4.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.table4.outputs.table }}" >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
 
