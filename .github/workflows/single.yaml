@@ -49,7 +49,7 @@
               cp outputs/*/inspection.json single_inspection.json
               pwd
               ls -l
-          - uses: buildingcash/json-to-markdown-table-action@v1
+          - uses: buildingcash/json-to-markdown-table-action@v1.1.0
             id: table
             with:
               json_file_path: "scanner/blacklight-query/single_inspection.json"
