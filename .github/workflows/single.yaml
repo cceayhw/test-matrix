@@ -55,10 +55,12 @@ jobs:
         run: |
           cat outputs/*/inspection.json | jq -r .hosts.requests.first_party > table1.json
           cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table2.json
+
           cat outputs/*/inspection.json | jq -r .reports.cookies > table3.json
           # cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table4.json
           cat outputs/*/inspection.json | jq -r .reports.third_party_trackers > table5.json
-
+          echo "table5"
+          cat table5.json
           # cp outputs/*/inspection.json single_inspection.json
           # pwd
           # ls -l
