@@ -50,4 +50,3 @@
             run: |
               ls -l output*
               echo "### ${URL}" >> $GITHUB_STEP_SUMMARY
-          - name: upload artifact
