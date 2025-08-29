@@ -60,7 +60,10 @@ jobs:
           # cat outputs/*/inspection.json | jq -r .hosts.requests.third_party > table4.json
           cat outputs/*/inspection.json | jq -r .reports.third_party_trackers > table5.json
           echo "table5"
-          [ "$(cat table5.json)" == "[]" ] && echo "[{"data":"empty"}]" > table5.json
+          [ "$(cat table1.json)" == "[]" ] && echo "[{\"data\":\"empty\"}]" > table1.json
+          [ "$(cat table2.json)" == "[]" ] && echo "[{\"data\":\"empty\"}]" > table2.json
+          [ "$(cat table3.json)" == "[]" ] && echo "[{\"data\":\"empty\"}]" > table3.json
+          [ "$(cat table5.json)" == "[]" ] && echo "[{\"data\":\"empty\"}]" > table5.json
           cat table5.json
           
 
