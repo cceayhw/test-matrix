@@ -43,6 +43,16 @@
               echo "Checking url $URL"
               node --version
               echo "${URL}" | ./blacklight-query
+          - name: set file name
+            working-directory: "scanner/blacklight-query"
+            run: |
+              cp outputs/*/inspection.json single_inspection.json
+          - uses: buildingcash/json-to-markdown-table-action@v1
+            id: table
+            with:
+              json_file_path: "scanner/blacklight-query/single_inspection.json"
+          - run: echo ${{ steps.table.outputs.table }}
+
           - name: job summary
             env:
               URL: ${{ github.event.inputs.url }}
@@ -82,3 +92,4 @@
               echo "${TRACKERS}" >> $GITHUB_STEP_SUMMARY
               echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
               echo "</details>" >> $GITHUB_STEP_SUMMARY
+              echo ${{ steps.table.outputs.table }} >> $GITHUB_STEP_SUMMARY
