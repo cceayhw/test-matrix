@@ -96,8 +96,8 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "${DOMAINS}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.table1.outputs.table }} >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.table2.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.table1.outputs.table }}" >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.table2.outputs.table }}" >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
           echo "<details><summary>Cookies:</summary>" >> $GITHUB_STEP_SUMMARY
@@ -105,7 +105,7 @@ jobs:
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           echo "${COOKIES}" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          echo ${{ steps.table3.outputs.table }} >> $GITHUB_STEP_SUMMARY
+          echo "${{ steps.table3.outputs.table }}" >> $GITHUB_STEP_SUMMARY
           echo "</details>" >> $GITHUB_STEP_SUMMARY
 
           echo "<details><summary>Event listeners:</summary>" >> $GITHUB_STEP_SUMMARY
