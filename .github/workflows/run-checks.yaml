@@ -36,7 +36,7 @@ jobs:
         working-directory: ./blacklight-query
         run: |
           echo "Running parallel node ${{ matrix.node_n }}"
-          split -l$((`wc -l <../a.in`/10)) ../a.in
+          split -l$((`wc -l <../data/a.in`/10)) ../data/a.in
           if [ ! -f "xa${NODE_N}" ]
           then
              echo "ignored"
@@ -61,24 +61,32 @@ jobs:
       - name: get artifacts
         uses: actions/download-artifact@v4
         with:
-          path: downloaded
-      - name: shell
+          path: reports
+      - name: generate report
         run: |
-          mkdir reports
-          ls -lR
-          for i in downloaded/*
-          do
-            echo $i
-            mv $i/* reports
-          done
-          ls -l reports
+          ./summary.sh ${GITHUB_RUN_ID}
+          ls -l
+      - name: commit to repo
+        uses: stefanzweifel/git-auto-commit-action@v4
+        commit_message: "GitHub actions run ${GITHUB_RUN_ID}"
+        file_pattern: "data/*.md"
+      # - name: shell
+      #   run: |
+      #     mkdir reports
+      #     ls -lR
+      #     for i in downloaded/*
+      #     do
+      #       echo $i
+      #       mv $i/* reports
+      #     done
+      #     ls -l reports
       - name: upload merged
         uses: actions/upload-artifact@v4
         with:
           name: merged-reports
           path: |
             reports/**
-            a.in
+            data/a.in
           if-no-files-found: warn
           retention-days: 1
       - name: delete matrix artifacts
