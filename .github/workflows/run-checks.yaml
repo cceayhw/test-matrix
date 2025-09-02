@@ -55,6 +55,8 @@ jobs:
           retention-days: 1
   merge-artifacts:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     needs: matrix-checks
     if: success() || failure()
     steps:
