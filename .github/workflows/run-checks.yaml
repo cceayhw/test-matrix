@@ -68,8 +68,9 @@ jobs:
           ls -l
       - name: commit to repo
         uses: stefanzweifel/git-auto-commit-action@v4
-        commit_message: "GitHub actions run ${GITHUB_RUN_ID}"
-        file_pattern: "data/*.md"
+        with:
+          commit_message: "GitHub actions run ${GITHUB_RUN_ID}"
+          file_pattern: "data/*.md"
       # - name: shell
       #   run: |
       #     mkdir reports
