@@ -17,7 +17,7 @@ jobs:
       matrix:
         node_n: [a,b,c,d,e,f,g,h,i,j]
       fail-fast: false
-      max-parallel: ${{ github.event.inputs.parallels || 5 }}
+      max-parallel: 10
     steps:
       - uses: actions/checkout@v5
       - uses: actions/checkout@v5
