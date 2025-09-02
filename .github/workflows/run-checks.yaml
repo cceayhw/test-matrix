@@ -58,6 +58,7 @@ jobs:
     needs: matrix-checks
     if: success() || failure()
     steps:
+      - uses: actions/checkout@v5
       - name: get artifacts
         uses: actions/download-artifact@v4
         with:
