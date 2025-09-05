@@ -1,0 +1,36 @@
+---
+name: test-param
+
+on:
+  schedule:
+    - cron: '1/2 * * * *'
+  workflow_dispatch:
+    inputs:
+      datafile:
+        type: choice
+        description: 'datafile'
+        required: true
+        default: url 
+        options:
+          - url 
+          - personal
+          - test
+      driveroption:
+        type: choice
+        description: 'Driver option'
+        required: true
+        default: default
+        options:
+          - default
+          - minimal
+
+jobs:
+  matrix-checks:
+    runs-on: ubuntu-latest
+    steps:
+      - name: test 1
+        env:
+          DATAFILE: "${{ inputs.datafile }}"
+          DRIVEROPTION: "${{ inputs.driveroption }}"
+        run: |
+          echo "${DATAFILE} ${DRIVEROPTION}"
