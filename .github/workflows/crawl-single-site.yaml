@@ -97,6 +97,6 @@ jobs:
           SITE_SIZE: ${{ needs.crawl_n_report.SITE_SIZE }}
         run: |
           echo "### job2" >> $GITHUB_STEP_SUMMARY
-          echo "### ${NUM_ENTRIES}" >> $GITHUB_STEP_SUMMARY
-          echo "### ${BIG_O} ${SITE_SIZE}" >> $GITHUB_STEP_SUMMARY
+          echo "### entries ${NUM_ENTRIES}" >> $GITHUB_STEP_SUMMARY
+          echo "### big_o ${BIG_O} ${SITE_SIZE}" >> $GITHUB_STEP_SUMMARY
 
