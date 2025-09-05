@@ -56,7 +56,8 @@ jobs:
            sort -u > gospider.out
 
           export ENTRIES=$(wc -l gospider.out)
-          echo "# entries: ENTRIES"
+          echo "# entries: ${ENTRIES}"
+          set -x
           echo "l(${ENTRIES})/l(10)" | bc -l 
           BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.*$//g')
           echo $BIG_O
