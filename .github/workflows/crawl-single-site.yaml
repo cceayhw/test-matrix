@@ -88,7 +88,7 @@ jobs:
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
   job2:
     runs-on: ubuntu-latest
-    needs: [crawl_site]
+    needs: [crawl_n_report]
     steps:
       - name: display vars
         env:
