@@ -41,4 +41,25 @@ jobs:
           go version
           GO111MODULE=on go install github.com/jaeles-project/gospider@latest
           $HOME/go/bin/gospider --help
+      - name: crawl and report
+        env:
+          URL: ${{ inputs.url }}
+          DEPTH: ${{ inputs.depth }}
+        run: |
+          time $HOME/go/bin/gospider -d ${DEPTH} -c 10 -s ${URL} | tr -d '\r' > crawl1.out
+          grep -v -E '\[(form|subdomains|linkfinder|javascript)\]' crawl1.out |\
+           grep -v -E 's/(.js|.css|.jpg|favicon.ico|.svg|.pdf)$//g' |\
+           grep -v -E 's/(.js|.css)?ver=//g' |\
+           sed -e 's/^.* - //g' -e 's/http:/https:/g' -e 's/\/$//g' |\
+           grep -v '\[code-40?\]' | grep -v '^mailto:' | grep "^${URL}" |\
+           grep -v wp-json/oembed |\
+           sort -u > gospider.out
+
+          ENTRIES=$(wc -l gospider.out)
+          BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.*$//g')
+          echo $BIG_O
+          echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
+          echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
+          echo "### Big O: [${BIG_O}]" >> $GITHUB_STEP_SUMMARY
+
 
