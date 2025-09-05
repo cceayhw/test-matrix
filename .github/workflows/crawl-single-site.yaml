@@ -56,6 +56,7 @@ jobs:
            sort -u > gospider.out
 
           ENTRIES=$(wc -l gospider.out)
+          echo "l(${ENTRIES})/l(10)" | bc -l 
           BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.*$//g')
           echo $BIG_O
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
