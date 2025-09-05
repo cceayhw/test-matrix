@@ -1,5 +1,5 @@
 ---
-name: check single url
+name: single url crawl
 
 on:
   workflow_dispatch:
