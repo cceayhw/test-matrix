@@ -1,0 +1,44 @@
+---
+name: check single url
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'url to test'
+        required: true
+        default: 'https://www.sonarqube-dev.ucl.ac.uk'
+        type: string
+      depth:
+        description: 'depth of website to crawl'
+        required: true
+        default: 2
+        type: int
+      notify_email:
+        description: 'notify email'
+        required: false
+        default: ''
+        type: string
+
+env:
+  E_FDOMAINS:
+  E_TDOMAINS:
+  E_COOKIES:
+  E_LISTNERS:
+  E_TRACKERS:
+
+run-name: "single url crawl ${{ inputs.url }} depth: ${{ inputs.depth }}"
+
+jobs:
+  crawl_site:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-go@v6
+        with:
+          go-version: '1.20'
+      - run: |
+          go version
+          GO111MODULE=on go install github.com/jaeles-project/gospider@latest
+          $HOME/go/bin/gospider --help
+
