@@ -92,9 +92,9 @@ jobs:
     steps:
       - name: display vars
         env:
-          NUM_ENTRIES: ${{ needs.crawl_n_report.outputs.NUM_ENTRIES }}
-          BIG_O: ${{ needs.crawl_n_report.outputs.BIG_O }}
-          SITE_SIZE: ${{ needs.crawl_n_report.outputs.SITE_SIZE }}
+          NUM_ENTRIES: ${{ needs.crawl_site.outputs.NUM_ENTRIES }}
+          BIG_O: ${{ needs.crawl_site.outputs.BIG_O }}
+          SITE_SIZE: ${{ needs.crawl_site.outputs.SITE_SIZE }}
         run: |
           echo "### job2" 
           echo "### entries ${NUM_ENTRIES}" 
