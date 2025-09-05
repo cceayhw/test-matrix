@@ -7,7 +7,7 @@ on:
       url:
         description: 'url to test'
         required: true
-        default: 'https://www.sonarqube-dev.ucl.ac.uk'
+        default: 'https://www.sonarqube.ucl.ac.uk'
         type: string
       depth:
         description: 'depth of website to crawl'
@@ -55,7 +55,8 @@ jobs:
            grep -v wp-json/oembed |\
            sort -u > gospider.out
 
-          ENTRIES=$(wc -l gospider.out)
+          export ENTRIES=$(wc -l gospider.out)
+          echo "# entries: ENTRIES"
           echo "l(${ENTRIES})/l(10)" | bc -l 
           BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.*$//g')
           echo $BIG_O
