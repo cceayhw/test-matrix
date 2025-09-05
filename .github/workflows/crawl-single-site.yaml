@@ -33,9 +33,9 @@ jobs:
   crawl_site:
     runs-on: ubuntu-latest
     outputs:
-      NUM_ENTRIES: ${{ steps.crawl_n_report.ENTRIES }}
-      BIG_O: ${{ steps.crawl_n_report.BIG_O }}
-      SITE_SIZE: ${{ steps.crawl_n_report.SIZE }}
+      NUM_ENTRIES: ${{ steps.crawl_n_report.outputs.ENTRIES }}
+      BIG_O: ${{ steps.crawl_n_report.outputs.BIG_O }}
+      SITE_SIZE: ${{ steps.crawl_n_report.outputs.SIZE }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
