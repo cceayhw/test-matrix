@@ -86,20 +86,32 @@ jobs:
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
+      - name: create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: crawl_output
+          path: gospider.out
+          if-no-files-found: warn
+          retention-days: 1
+
   job2:
     runs-on: ubuntu-latest
     needs: crawl_site
     steps:
+      - name: get crawled page list
+        uses: actions/download-artifact@v4
+        with:
+          path: crawled
       - name: display vars
         env:
-          NUM_ENTRIES: ${{ needs.crawl_site.outputs.NUM_ENTRIES }}
+          ENTRIES: ${{ needs.crawl_site.outputs.NUM_ENTRIES }}
           BIG_O: ${{ needs.crawl_site.outputs.BIG_O }}
-          SITE_SIZE: ${{ needs.crawl_site.outputs.SITE_SIZE }}
+          SIZE: ${{ needs.crawl_site.outputs.SITE_SIZE }}
         run: |
           echo "### job2" 
-          echo "### entries ${NUM_ENTRIES}" 
-          echo "### big_o ${BIG_O} ${SITE_SIZE}" 
+          echo "### entries ${ENTRIES}" 
+          echo "### big_o ${BIG_O} ${SIZE}" 
           echo "### job2" >> $GITHUB_STEP_SUMMARY
-          echo "### entries ${NUM_ENTRIES}" >> $GITHUB_STEP_SUMMARY
-          echo "### big_o ${BIG_O} ${SITE_SIZE}" >> $GITHUB_STEP_SUMMARY
+          echo "### entries ${ENTRIES}" >> $GITHUB_STEP_SUMMARY
+          echo "### big_o ${BIG_O} ${SIZE}" >> $GITHUB_STEP_SUMMARY
 
