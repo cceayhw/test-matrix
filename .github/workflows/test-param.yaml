@@ -2,8 +2,8 @@
 name: test-param
 
 on:
-  schedule:
-    - cron: "* * * * *"
+  # schedule:
+  #   - cron: "* * * * *"
   workflow_dispatch:
     inputs:
       datafile:
