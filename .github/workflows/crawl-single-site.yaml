@@ -32,6 +32,10 @@ run-name: "single url crawl ${{ inputs.url }} depth: ${{ inputs.depth }}"
 jobs:
   crawl_site:
     runs-on: ubuntu-latest
+    outputs:
+      NUM_ENTRIES: ${{ steps.crawl_n_report.ENTRIES }}
+      BIG_O: ${{ steps.crawl_n_report.BIG_O }}
+      SITE_SIZE: ${{ steps.crawl_n_report.SIZE }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
@@ -41,7 +45,7 @@ jobs:
           go version
           GO111MODULE=on go install github.com/jaeles-project/gospider@latest
           $HOME/go/bin/gospider --help
-      - name: crawl and report
+      - name: crawl_n_report
         env:
           URL: ${{ inputs.url }}
           DEPTH: ${{ inputs.depth }}
@@ -75,8 +79,24 @@ jobs:
               SIZE=L ;;
           esac
 
+          echo "NUM_ENTRIES=${ENTRIES}" >> "$GITHUB_OUTPUT"
+          echo "BIG_O=${BIG_O}" >> "$GITHUB_OUTPUT"
+          echo "SITE_SIZE=${SIZE}" >> "$GITHUB_OUTPUT"
+
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
-
+  job2:
+    runs-on: ubuntu-latest
+    needs: [crawl_site]
+    steps:
+      - name: display vars
+        env:
+          NUM_ENTRIES: ${{ needs.crawl_n_report.NUM_ENTRIES }}
+          BIG_O: ${{ needs.crawl_n_report.BIG_O }}
+          SITE_SIZE: ${{ needs.crawl_n_report.SITE_SIZE }}
+        run: |
+          echo "### job2" >> $GITHUB_STEP_SUMMARY
+          echo "### ${NUM_ENTRIES}" >> $GITHUB_STEP_SUMMARY
+          echo "### ${BIG_O} ${SITE_SIZE}" >> $GITHUB_STEP_SUMMARY
 
