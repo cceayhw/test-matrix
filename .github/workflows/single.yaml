@@ -17,6 +17,8 @@ env:
   E_LISTNERS:
   E_TRACKERS:
 
+run-name: "check single url ${{ inputs.url }} by @${{ github.actor }}"
+
 jobs:
   check_url:
     runs-on: ubuntu-latest
