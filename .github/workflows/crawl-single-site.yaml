@@ -59,10 +59,21 @@ jobs:
           echo "# entries: ${ENTRIES}"
           set -x
           echo "l(${ENTRIES})/l(10)" | bc -l 
-          BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.*$//g')
+          BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.[0-9]*$//g')
           echo $BIG_O
+          SIZE=L
+          case "${BIG_O}" in
+            "0")
+              SIZE= ;;
+            "1")
+              SIZE=S ;;
+            "2" | "3" )
+              SIZE=M ;;
+            *)
+              SIZE=L ;;
+          esac
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
-          echo "### Big O: [${BIG_O}]" >> $GITHUB_STEP_SUMMARY
+          echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
 
 
