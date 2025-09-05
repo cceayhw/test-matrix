@@ -46,14 +46,16 @@ jobs:
           URL: ${{ inputs.url }}
           DEPTH: ${{ inputs.depth }}
         run: |
-          time $HOME/go/bin/gospider -d ${DEPTH} -c 10 -s ${URL} | tr -d '\r' > crawl1.out
-          grep -v -E '\[(form|subdomains|linkfinder|javascript)\]' crawl1.out |\
-           grep -v -E 's/(.js|.css|.jpg|favicon.ico|.svg|.pdf)$//g' |\
-           grep -v -E 's/(.js|.css)?ver=//g' |\
-           sed -e 's/^.* - //g' -e 's/http:/https:/g' -e 's/\/$//g' |\
-           grep -v '\[code-40?\]' | grep -v '^mailto:' | grep "^${URL}" |\
-           grep -v wp-json/oembed |\
-           sort -u > gospider.out
+          EX_FILES='.(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|js)'
+          time $HOME/go/bin/gospider -d ${DEPTH} -c 10 --blacklist "${EX_FILES}" -s ${URL} |\
+            tr -d '\r' |\
+            grep -v -E '\[(form|subdomains|linkfinder|javascript)\]' crawl1.out |\
+            grep -v -E 's/(.js|.css|.jpg|favicon.ico|.svg|.pdf)$//g' |\
+            grep -v -E 's/(.js|.css)?ver=//g' | grep -v '\[code-40?\]'|\
+            sed -e 's/^.* - //g' -e 's/http:/https:/g' -e 's/\/$//g' |\
+            grep -v '^mailto:' | grep "^${URL}" |\
+            grep -v wp-json/oembed |\
+            sort -u > gospider.out
 
           export ENTRIES=$(wc -l gospider.out | cut -d ' ' -f1)
           echo "# entries: ${ENTRIES}"
@@ -72,6 +74,7 @@ jobs:
             *)
               SIZE=L ;;
           esac
+
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
