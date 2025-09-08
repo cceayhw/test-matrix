@@ -3,7 +3,7 @@
 NODE_N=${1}
 DATA=${2}
 
-echo "Running parallel node ${{ matrix.node_n }}"
+echo "Running parallel node ${NODE_N}"
 split -l 100 ${DATA}
 if [ ! -f "xa${NODE_N}" ]
 then
