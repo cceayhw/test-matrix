@@ -12,7 +12,7 @@ on:
       depth:
         description: 'depth of website to crawl'
         required: true
-        default: 2
+        default: 10
         type: int
       notify_email:
         description: 'notify email'
