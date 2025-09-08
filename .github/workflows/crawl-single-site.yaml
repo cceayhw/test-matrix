@@ -33,9 +33,9 @@ jobs:
   crawl_site:
     runs-on: ubuntu-latest
     outputs:
-      NUM_ENTRIES: ${{ steps.crawl_n_report.outputs.entries }}
-      BIG_O: ${{ steps.crawl_n_report.outputs.big_o }}
-      SITE_SIZE: ${{ steps.crawl_n_report.outputs.size }}
+      NUM_ENTRIES: ${{ steps.crawl.outputs.entries }}
+      BIG_O: ${{ steps.crawl.outputs.big_o }}
+      SITE_SIZE: ${{ steps.crawl.outputs.size }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
@@ -46,47 +46,12 @@ jobs:
           GO111MODULE=on go install github.com/jaeles-project/gospider@latest
           $HOME/go/bin/gospider --help
       - name: crawl_n_report
+        id: crawl
         env:
           URL: ${{ inputs.url }}
           DEPTH: ${{ inputs.depth }}
         run: |
           ./crawl.sh ${URL} ${DEPTH}
-          # EX_FILES='.(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|js)'
-          # time $HOME/go/bin/gospider -d ${DEPTH} -c 10 --blacklist "${EX_FILES}" -s ${URL} |\
-          #   tr -d '\r' |\
-          #   grep -v -E '\[(form|subdomains|linkfinder|javascript)\]' |\
-          #   grep -v -E 's/(.js|.css|.jpg|favicon.ico|.svg|.pdf)$//g' |\
-          #   grep -v -E 's/(.js|.css)?ver=//g' | grep -v '\[code-40?\]'|\
-          #   sed -e 's/^.* - //g' -e 's/http:/https:/g' -e 's/\/$//g' |\
-          #   grep -v '^mailto:' | grep "^${URL}" |\
-          #   grep -v wp-json/oembed |\
-          #   sort -u > gospider.out
-
-          # export ENTRIES=$(wc -l gospider.out | cut -d ' ' -f1)
-          # echo "# entries: ${ENTRIES}"
-          # set -x
-          # echo "l(${ENTRIES})/l(10)" | bc -l 
-          # BIG_O=$(echo "l(${ENTRIES})/l(10)" | bc -l | sed 's/\.[0-9]*$//g')
-          # echo $BIG_O
-          # SIZE=L
-          # case "${BIG_O}" in
-          #   "0")
-          #     SIZE= ;;
-          #   "1")
-          #     SIZE=S ;;
-          #   "2" | "3" )
-          #     SIZE=M ;;
-          #   *)
-          #     SIZE=L ;;
-          # esac
-
-          # echo "entries=${ENTRIES}" >> "$GITHUB_OUTPUT"
-          # echo "big_o=${BIG_O}" >> "$GITHUB_OUTPUT"
-          # echo "size=${SIZE}" >> "$GITHUB_OUTPUT"
-
-          # echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
-          # echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
-          # echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
       - name: create artifact
         uses: actions/upload-artifact@v4
         with:
@@ -94,11 +59,21 @@ jobs:
           path: gospider.out
           if-no-files-found: warn
           retention-days: 1
-
-  job2:
+  matrix-checks:
     runs-on: ubuntu-latest
     needs: crawl_site
+    strategy:
+      matrix:
+        node_n: [a,b,c ]
+        #,d,e,f,g,h,i,j]
+      fail-fast: false
+      max-parallel: 10
     steps:
+      - uses: actions/checkout@v5
+      - uses: actions/checkout@v5
+        with:
+          repository: 'the-markup/blacklight-query'
+          path: blacklight-query
       - name: get crawled page list
         uses: actions/download-artifact@v4
         with:
@@ -118,3 +93,66 @@ jobs:
           echo "### entries ${ENTRIES}" >> $GITHUB_STEP_SUMMARY
           echo "### big_o ${BIG_O} ${SIZE}" >> $GITHUB_STEP_SUMMARY
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20.15.1'
+      - name: node
+        working-directory: ./blacklight-query
+        run: npm install
+      - name: run thread abc ${{ matrix.node_n }}
+        env:
+          NODE_N: ${{ matrix.node_n }}
+        run: |
+          ./query.sh ${NODE_N} crawled/gospider.out
+      - name: create artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: blacklight-report-${{ matrix.node_n }}
+          path: blacklight-query/outputs/**
+          if-no-files-found: warn
+          retention-days: 1
+  merge-artifacts:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    needs: matrix-checks
+    if: success() || failure()
+    steps:
+      - uses: actions/checkout@v5
+      - name: get artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: reports
+      - name: generate report
+        run: |
+          ./summary.sh ${GITHUB_RUN_ID}
+          ls -lR
+      - name: commit to repo
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "GitHub actions run ${GITHUB_RUN_ID}"
+          file_pattern: "data/*.md"
+      # - name: shell
+      #   run: |
+      #     mkdir reports
+      #     ls -lR
+      #     for i in downloaded/*
+      #     do
+      #       echo $i
+      #       mv $i/* reports
+      #     done
+      #     ls -l reports
+      - name: upload merged
+        uses: actions/upload-artifact@v4
+        with:
+          name: merged-reports
+          path: |
+            reports/**
+            data/a.in
+          if-no-files-found: warn
+          retention-days: 1
+      - name: delete matrix artifacts
+        uses: geekyeggo/delete-artifact@v5
+        with:
+          name: |
+            blacklight-report-*
