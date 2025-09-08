@@ -36,6 +36,7 @@ jobs:
       NUM_ENTRIES: ${{ steps.crawl.outputs.entries }}
       BIG_O: ${{ steps.crawl.outputs.big_o }}
       SITE_SIZE: ${{ steps.crawl.outputs.size }}
+      MATRIX_N: ${{ steps.crawl.outputs.matrix_n }}
     steps:
       - uses: actions/checkout@v5
       - uses: actions/setup-go@v6
@@ -64,7 +65,8 @@ jobs:
     needs: crawl_site
     strategy:
       matrix:
-        node_n: [a,b,c]
+        node_n: ${{ fromJson(needs.crawl_site.outputs.MATRIX_N) }}
+        #[a,b,c]
         #,d,e,f,g,h,i,j]
       fail-fast: false
       max-parallel: 10
