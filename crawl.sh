@@ -46,4 +46,4 @@ fi
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
 
-[ -f "${TMP_FILE}" ] && cat "${TMP_FILE}" ; rm "${TMP_FILE}"
+[ "${CI}" != "true" ] && cat "${TMP_FILE}" ; rm -f "${TMP_FILE}"
