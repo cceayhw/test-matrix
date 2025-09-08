@@ -15,7 +15,6 @@ DEPTH="${2:-2}"
             sort -u > gospider.out
 
           export ENTRIES=$(wc -l gospider.out | cut -d ' ' -f1)
-          ENTRIES=1000
           echo "# entries: ${ENTRIES}"
           set -x
           echo "(l(${ENTRIES})/l(50))+1" | bc -l 
