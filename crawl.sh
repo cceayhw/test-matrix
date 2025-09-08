@@ -32,7 +32,7 @@ DEPTH="${2:-2}"
           esac
 
 TMP_FILE=tmp.%%
-if [ "${CI} == "true" ]
+if [ "${CI}" == "true" ]
 then
   GITHUB_OUTPUT=${TMP_FILE}
   GITHUB_STEP_SUMMARY=${TMP_FILE}
@@ -40,7 +40,7 @@ fi
           echo "entries=${ENTRIES}" >> "$GITHUB_OUTPUT"
           echo "big_o=${BIG_O}" >> "$GITHUB_OUTPUT"
           echo "size=${SIZE}" >> "$GITHUB_OUTPUT"
-          seq \{1..${BIG_O}\}
+          #seq \{1..${BIG_O}\}
 
           echo "### URL: [${URL}] crawl depth: [${DEPTH}]" >> $GITHUB_STEP_SUMMARY
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
