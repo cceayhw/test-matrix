@@ -18,5 +18,5 @@ else
   done
 fi
 
-# rm -f xa* chunk*
+rm -f xa* chunk*
 
