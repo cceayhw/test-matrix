@@ -14,9 +14,9 @@ else
   for i in chunkx*
   do
     cat ${i}
-    ./blacklight-query/blacklight-query < ${i}
+    ./blacklight-query < ${i}
   done
 fi
 
-rm -f xa*
+rm -f xa* chunk*
 
