@@ -66,8 +66,6 @@ jobs:
     strategy:
       matrix:
         node_n: ${{ fromJson(needs.crawl_site.outputs.MATRIX_N) }}
-        #[a,b,c]
-        #,d,e,f,g,h,i,j]
       fail-fast: false
       max-parallel: 10
     steps:
@@ -80,28 +78,13 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           path: .
-      - name: display vars
-        env:
-          ENTRIES: ${{ needs.crawl_site.outputs.NUM_ENTRIES }}
-          BIG_O: ${{ needs.crawl_site.outputs.BIG_O }}
-          SIZE: ${{ needs.crawl_site.outputs.SITE_SIZE }}
-        run: |
-          ls -lR
-          echo "### job2" 
-          echo "### entries ${ENTRIES}" 
-          echo "### big_o ${BIG_O} ${SIZE}" 
-
-          echo "### job2" >> $GITHUB_STEP_SUMMARY
-          echo "### entries ${ENTRIES}" >> $GITHUB_STEP_SUMMARY
-          echo "### big_o ${BIG_O} ${SIZE}" >> $GITHUB_STEP_SUMMARY
-
       - uses: actions/setup-node@v4
         with:
           node-version: '20.15.1'
       - name: node
         working-directory: ./blacklight-query
         run: npm install
-      - name: run thread abc ${{ matrix.node_n }}
+      - name: run thread ${{ matrix.node_n }}
         working-directory: ./blacklight-query
         env:
           NODE_N: ${{ matrix.node_n }}
