@@ -16,7 +16,6 @@ DEPTH="${2:-2}"
 
           export ENTRIES=$(wc -l gospider.out | cut -d ' ' -f1)
           echo "# entries: ${ENTRIES}"
-          set -x
           echo "(l(${ENTRIES})/l(50))+1" | bc -l 
           BIG_O=$(echo "(l(${ENTRIES})/l(50))+1" | bc -l | sed 's/\.[0-9]*$//g')
           echo $BIG_O
@@ -31,9 +30,13 @@ DEPTH="${2:-2}"
             *)
               SIZE=L ;;
           esac
-#TODO delete
-#GITHUB_OUTPUT=tmp.$$
-#GITHUB_STEP_SUMMARY=tmp.$$
+
+TMP_FILE=tmp.%%
+if [ "${CI} == "true" ]
+then
+  GITHUB_OUTPUT=${TMP_FILE}
+  GITHUB_STEP_SUMMARY=${TMP_FILE}
+fi
           echo "entries=${ENTRIES}" >> "$GITHUB_OUTPUT"
           echo "big_o=${BIG_O}" >> "$GITHUB_OUTPUT"
           echo "size=${SIZE}" >> "$GITHUB_OUTPUT"
@@ -43,7 +46,4 @@ DEPTH="${2:-2}"
           echo "### Crawled page count: [${ENTRIES}]" >> $GITHUB_STEP_SUMMARY
           echo "### Big O: [${BIG_O}] size is [${SIZE}]" >> $GITHUB_STEP_SUMMARY
 
-#TODO delete
-#cat tmp.$$
-#rm tmp.$$
-
+[ -f "${TMP_FILE}" ] && cat "${TMP_FILE}" && rm "${TMP_FILE}"
