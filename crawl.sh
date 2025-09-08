@@ -32,7 +32,7 @@ DEPTH="${2:-2}"
           esac
 
 TMP_FILE=tmp.%%
-if [ "${CI}" == "true" ]
+if [ "${CI}" != "true" ]
 then
   GITHUB_OUTPUT=${TMP_FILE}
   GITHUB_STEP_SUMMARY=${TMP_FILE}
