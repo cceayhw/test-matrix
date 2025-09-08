@@ -7,8 +7,8 @@ DEPTH="${2:-2}"
           time $HOME/go/bin/gospider -d ${DEPTH} -c 10 --blacklist "${EX_FILES}" -s ${URL} |\
             tr -d '\r' |\
             grep -v -E '\[(form|subdomains|linkfinder|javascript)\]' |\
-            grep -v -E 's/(.js|.css|.jpg|favicon.ico|.svg|.pdf)$//g' |\
-            grep -v -E 's/(.js|.css)?ver=//g' | grep -v '\[code-40?\]'|\
+            grep -v -E '.(jpg|jpeg|gif|css|tif|tiff|png|ttf|woff|woff2|ico|pdf|svg|js)$' |\
+            grep -v -E '.(js|css)?ver=//g' | grep -v '\[code-40?\]'|\
             sed -e 's/^.* - //g' -e 's/http:/https:/g' -e 's/\/$//g' |\
             grep -v '^mailto:' | grep "^${URL}" |\
             grep -v wp-json/oembed |\
