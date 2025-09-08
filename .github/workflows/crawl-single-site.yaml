@@ -126,23 +126,8 @@ jobs:
           path: reports
       - name: generate report
         run: |
-          ./summary.sh ${GITHUB_RUN_ID}
+          ./summary.sh ${GITHUB_RUN_ID} crawl_summary_${GITHUB_RUN_ID}.md
           ls -lR
-      # - name: commit to repo
-      #   uses: stefanzweifel/git-auto-commit-action@v4
-      #   with:
-      #     commit_message: "GitHub actions run ${GITHUB_RUN_ID}"
-      #     file_pattern: "data/*.md"
-      # - name: shell
-      #   run: |
-      #     mkdir reports
-      #     ls -lR
-      #     for i in downloaded/*
-      #     do
-      #       echo $i
-      #       mv $i/* reports
-      #     done
-      #     ls -l reports
       - name: upload merged
         uses: actions/upload-artifact@v4
         with:
@@ -150,6 +135,7 @@ jobs:
           path: |
             reports/**
             data/a.in
+            crawl_summary*.*
           if-no-files-found: warn
           retention-days: 1
       - name: delete matrix artifacts
@@ -157,3 +143,4 @@ jobs:
         with:
           name: |
             blacklight-report-*
+            crawl_output

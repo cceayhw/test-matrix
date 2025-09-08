@@ -1,8 +1,11 @@
 #!/bin/bash
 
+
 JSON=inspection.json
 TODAY=$(date +%Y%m%d)
-MD="data/summary.${TODAY}-${1}.md"
+MD="${data/summary.${TODAY}-${1}.md"
+[ "${2}" != "" ] && MD="${2}"
+
 
 cat << EOB > "${MD}"
 # Summary
