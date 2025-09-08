@@ -11,12 +11,12 @@ then
 else
   node --version
   split -l 10 "xa${NODE_N}" chunk
-  for i in chunkx*
+  for i in chunk*
   do
     cat ${i}
     ./blacklight-query < ${i}
   done
 fi
 
-rm -f xa* chunk*
+# rm -f xa* chunk*
 
