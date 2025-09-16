@@ -24,7 +24,17 @@ jobs:
   test-param:
     runs-on: ubuntu-latest
     steps:
-      - run: echo 1
+      - name: run
+        env:
+          df: ${{ inputs.datafile }}
+          do: ${{ inputs.driveroption }}
+          mr: ${{ inputs.mockrunonly }}
+        run: |
+        echo 1
+        echo "datafile: ${df}"
+        echo "driver: ${do}"
+        echo "mock: ${mr}"
+
       # uses: run-checks.yaml
       # with:
       #   datafile: 'test'
