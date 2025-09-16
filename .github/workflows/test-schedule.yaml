@@ -32,7 +32,6 @@ on:
 jobs:
   test-param:
   uses: run-checks.yaml
-  secrets: inherit
   with:
     datafile: 'test'
     driveroption: 'minimal'
