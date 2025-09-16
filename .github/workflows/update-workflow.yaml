@@ -21,10 +21,10 @@ jobs:
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'test.yaml'
-          commitChange: false
+          commitChange: true
           changes: |
             {
-              "test.yaml": {
+              ".github/workflows/test-schedule.yaml": {
                 "on.workflow_dispatch.inputs.datafile.options": [ "a", "b", "c"]
               }
             }
