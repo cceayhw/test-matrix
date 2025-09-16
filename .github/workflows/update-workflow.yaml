@@ -13,22 +13,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
+    - name: setup python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12'
       - name: echo
+        working-directory: update-workflow
         run: |
-          ls -l data/*.in
-          cp .github/workflows/test-schedule.yaml test.yaml
-      - name: update yaml
-        uses: fjogeleit/yaml-update-action@main
-        with:
-          valueFile: 'test.yaml'
-          commitChange: true
-          masterBranchName: main
-          changes: |
-            {
-              ".github/workflows/test-schedule.yaml": {
-                "on.workflow_dispatch.inputs.datafile.options": [ "a", "b", "c"]
-              }
-            }
-      - name: echo2
-        run: |
-          cat test.yaml
+          poetry install
+          poetry run python enumerate_files.py
+          cat .github/workflows/test-schedule.py
