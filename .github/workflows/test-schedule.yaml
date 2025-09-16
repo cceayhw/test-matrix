@@ -31,7 +31,7 @@ on:
 
 jobs:
   test-param:
-    uses: run-checks.yaml
+    uses: run-checks.yaml@main
     with:
       datafile: 'test'
       driveroption: 'minimal'
