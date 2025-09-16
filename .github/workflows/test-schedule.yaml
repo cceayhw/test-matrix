@@ -2,32 +2,8 @@
 name: test schedule
 
 on:
-  # schedule:
-  #   - cron: "*/15 * * * 1-5"
-  workflow_dispatch:
-    inputs:
-      datafile:
-        type: choice
-        description: 'datafile'
-        required: true
-        default: test
-        options:
-          - url
-          - personal
-          - test
-      driveroption:
-        type: choice
-        description: 'Driver option'
-        required: true
-        default: default
-        options:
-          - default
-          - minimal
-      mockrunonly:
-        type: boolean
-        description: 'mock run only'
-        required: true
-        default: false
+  schedule:
+    - cron: "*/15 * * * 1-5"
 
 jobs:
   test-param:
