@@ -24,7 +24,9 @@ jobs:
           commitChange: false
           changes: |
             {
-              "on.workflow_dispatch.inputs.datafile.options": [ "a", "b", "c"]
+              "test.yaml": {
+                "on.workflow_dispatch.inputs.datafile.options": [ "a", "b", "c"]
+              }
             }
       - name: echo2
         run: |
