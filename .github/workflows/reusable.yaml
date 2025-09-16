@@ -30,10 +30,10 @@ jobs:
           do: ${{ inputs.driveroption }}
           mr: ${{ inputs.mockrunonly }}
         run: |
-        echo 1
-        echo "datafile: ${df}"
-        echo "driver: ${do}"
-        echo "mock: ${mr}"
+          echo 1
+          echo "datafile: ${df}"
+          echo "driver: ${do}"
+          echo "mock: ${mr}"
 
       # uses: run-checks.yaml
       # with:
