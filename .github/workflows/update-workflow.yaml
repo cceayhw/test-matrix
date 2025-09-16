@@ -21,9 +21,11 @@ jobs:
         uses: fjogeleit/yaml-update-action@main
         with:
           valueFile: 'test.yaml'
-          propertyPath: 'on.workflow_dispatch.inputs.datafile.options'
-          value: "{ [ 'a', 'b', 'c']}"
           commitChange: false
+          changes: |
+            {
+              "on.workflow_dispatch.inputs.datafile.options": [ "a", "b", "c"]
+            }
       - name: echo2
         run: |
           cat test.yaml
