@@ -1,0 +1,33 @@
+---
+name: reusable
+
+on:
+  workflow_call:
+    inputs:
+      datafile:
+        type: string
+        description: 'datafile'
+        required: true
+        default: test
+      driveroption:
+        type: string
+        description: 'Driver option'
+        required: true
+        default: default
+      mockrunonly:
+        type: string
+        description: 'mock run only'
+        required: true
+        default: false
+
+jobs:
+  test-param:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo 1
+      # uses: run-checks.yaml
+      # with:
+      #   datafile: 'test'
+      #   driveroption: 'minimal'
+      #   mockrunonly: true
+      
