@@ -35,5 +35,5 @@ jobs:
     with:
       datafile: ${{ inputs.datafile || 'test' }}
       driveroption: ${{ inputs.driveroptions || 'minimal' }}
-      mockrunonly: ${{ inputs.mockrunonly || true }}
+      mockrunonly: "${{ inputs.mockrunonly || 'true' }}"
       
