@@ -7,18 +7,18 @@ on:
       datafile:
         type: string
         description: 'datafile'
-        required: true
-        default: test
+        #required: true
+        #default: test
       driveroption:
         type: string
         description: 'Driver option'
-        required: true
-        default: default
+        #required: true
+        #default: default
       mockrunonly:
         type: string
         description: 'mock run only'
-        required: true
-        default: false
+        #required: true
+        #default: false
 
 jobs:
   test-param:

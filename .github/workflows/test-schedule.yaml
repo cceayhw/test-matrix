@@ -34,6 +34,6 @@ jobs:
     uses: cceayhw/test-matrix/.github/workflows/reusable.yaml@main
     with:
       datafile: ${{ inputs.datafile || 'test' }}
-      driveroption: ${{ inputs.driveroptions || 'minimal' }}
+      driveroption: ${{ inputs.driveroption || 'minimal' }}
       mockrunonly: "${{ inputs.mockrunonly || 'true' }}"
       
