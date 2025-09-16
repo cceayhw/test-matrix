@@ -31,7 +31,7 @@ on:
 
 jobs:
   test-param:
-    uses: run-checks.yaml@main
+    uses: .github/workflows/reusable.yaml@main
     with:
       datafile: 'test'
       driveroption: 'minimal'
