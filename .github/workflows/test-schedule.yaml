@@ -31,12 +31,12 @@ on:
 
 jobs:
   test-param:
-  runs-on: ubuntu-latest
-  steps:
-    run: echo 1
-    # uses: run-checks.yaml
-    # with:
-    #   datafile: 'test'
-    #   driveroption: 'minimal'
-    #   mockrunonly: true
-    
+    runs-on: ubuntu-latest
+    steps:
+      run: echo 1
+      # uses: run-checks.yaml
+      # with:
+      #   datafile: 'test'
+      #   driveroption: 'minimal'
+      #   mockrunonly: true
+      
