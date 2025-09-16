@@ -1,0 +1,29 @@
+---
+name: test udpate
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'data/**.in'
+
+jobs:
+  test-update:
+  runs-on: ubuntu-latest
+  steps:
+    - uses: actions/checkout@v5
+    - name: echo
+      run: |
+        ls -l data/*.in
+        cp .github/workflows/test-schedule.yaml test.yaml
+    - name: update yaml
+      uses: fjogeleit/yaml-update-action@main
+      with:
+        valueFile: 'test.yaml'
+        propertyPath: 'on.workflow_dispatch.inputs.datafile.options'
+        value: v1.0.1
+        commitChange: false
+    - name: echo2
+      run: |
+        cat test.yaml
