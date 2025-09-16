@@ -22,7 +22,7 @@ jobs:
         with:
           valueFile: 'test.yaml'
           propertyPath: 'on.workflow_dispatch.inputs.datafile.options'
-          value: v1.0.1
+          value: { [ 'a', 'b', 'c']}
           commitChange: false
       - name: echo2
         run: |
