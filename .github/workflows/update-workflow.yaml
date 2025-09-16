@@ -26,4 +26,4 @@ jobs:
         run: |
           poetry install
           poetry run python enumerate_files.py
-          cat ../.github/workflows/test-schedule.py
+          cat ../.github/workflows/test-schedule.yaml
