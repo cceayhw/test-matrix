@@ -22,6 +22,7 @@ jobs:
         with:
           valueFile: 'test.yaml'
           commitChange: true
+          masterBranchName: main
           changes: |
             {
               ".github/workflows/test-schedule.yaml": {
