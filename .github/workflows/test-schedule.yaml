@@ -7,7 +7,7 @@ on:
 
 jobs:
   test-param:
-    uses: ./reusable.yaml@main
+    uses: cceayhw/test-matrix/.github/workflows/reusable.yaml@main
     with:
       datafile: 'test'
       driveroption: 'minimal'
