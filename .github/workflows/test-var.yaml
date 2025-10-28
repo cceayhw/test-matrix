@@ -14,7 +14,7 @@ jobs:
         id: set_vars
         run: |
           echo "TODAY=$(date +'%y-%m-%d')" >> "$GITHUB_OUTPUT"
-          echo "EMAILS=$(cat test.email  | tr -s '\n' ',' | sed -e 's/,$//g')" >> $GITHUB_OUTPUT"
+          echo "EMAILS=$(cat test.email  | tr -s '\n' ',' | sed -e 's/,$//g')" >> "$GITHUB_OUTPUT"
 
   get_var:
     runs-on: ubuntu-latest
