@@ -25,7 +25,7 @@ jobs:
         env:
           VAR_TODAY: ${{ needs.set_var.outputs.TODAY }}
           VAR_EMAILS: ${{ needs.set_var.outputs.EMAILS }}
-          VAR_BRANCH: ${{ github.github_ref_name }}
+          VAR_BRANCH: ${{ github.ref_name }}
         run: |
           echo "${VAR_TODAY}"
           echo "${VAR_EMAILS}"
