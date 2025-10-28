@@ -8,11 +8,14 @@ jobs:
     runs-on: ubuntu-latest
     outputs:
       TODAY: ${{ steps.set_vars.outputs.TODAY }}
+      EMAILS: ${{ steps.set_vars.outputs.EMAILS }}
     steps:
       - name: set vars
         id: set_vars
         run: |
           echo "TODAY=$(date +'%y-%m-%d')" >> "$GITHUB_OUTPUT"
+          echo "EMAILS=$(cat test.email  | tr -s '\n' ',' | sed -e 's/,$//g')" >> $GITHUB_OUTPUT"
+
   get_var:
     runs-on: ubuntu-latest
     needs: set_var
@@ -20,7 +23,9 @@ jobs:
       - name: display
         env:
           VAR_TODAY: ${{ needs.set_var.outputs.TODAY }}
-          BRANCH: ${{ github.github_ref_name }}
+          VAR_EMAILS: ${{ needs.set_var.outputs.EMAILS }}
+          VAR_BRANCH: ${{ github.github_ref_name }}
         run: |
           echo "${VAR_TODAY}"
-          echo "$BRANCH"
+          echo "${VAR_EMAILS}"
+          echo "${VAR_BRANCH}"
