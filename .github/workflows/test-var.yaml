@@ -1,0 +1,26 @@
+---
+name: test var
+on:
+  workflow_dispatch:
+
+jobs:
+  set_var:
+    uses: ubuntu-latest
+    outputs:
+      TODAY: ${{ steps.set_vars.outputs.TODAY }}
+    steps:
+      - name: set vars
+        id: set_vars
+        run: |
+          echo "TODAY=$(date +'%y-%m-%d')" >> $GITHUB_OUTPUT"
+  get_var:
+    uses: ubuntu-latest
+    needs: set_var
+    steps:
+      - name: display
+        env:
+          VAR_TODAY: ${{ needs.set_var.outputs.TODAY }}
+          BRANCH: ${{ github.github_ref_name }}
+        run: |
+          echo "${VAR_TODAY}"
+          echo "$BRANCH"
