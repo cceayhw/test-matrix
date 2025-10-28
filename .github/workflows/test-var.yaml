@@ -10,6 +10,7 @@ jobs:
       TODAY: ${{ steps.set_vars.outputs.TODAY }}
       EMAILS: ${{ steps.set_vars.outputs.EMAILS }}
     steps:
+      - uses: actions/checkout@v5
       - name: set vars
         id: set_vars
         run: |
